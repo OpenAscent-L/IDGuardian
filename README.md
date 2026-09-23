@@ -39,6 +39,7 @@ The released code is the optimization implementation. Downstream personalization
 | Identity injection condition | 16 projected IP-Adapter image tokens concatenated with SDXL text tokens |
 | Score bridge | `-(noise_pred_protected - noise_pred_clean) / sqrt(1 - alpha_bar_t)` |
 | Update | Normalize identity gradient, subtract normalized score direction, sign-PGD, L-infinity projection |
+| Initialization | `0.001 * N(0, I)` |
 | Default setting | `epsilon = 8/255`, `alpha = 0.005`, `N_iter = 200` |
 
 ## ⚙️ Installation
@@ -95,7 +96,7 @@ python scripts/IDGuardian_train.py \\
   --image-size 512
 ```
 
-The default optimization configuration follows the paper: prompt `A photo of a person`, `epsilon = 8/255`, `alpha = 0.005`, and `200` PGD steps. The optimized image is projected into the L-infinity ball and saved under `--output-dir`; `results.jsonl` records the output path and PSNR.
+The default optimization uses prompt `A photo of a person`, initializes with `0.001 * N(0, I)`, and uses `epsilon = 8/255`, `alpha = 0.005`, and `200` PGD steps. The optimized image is projected into the L-infinity ball and saved under `--output-dir`; `results.jsonl` records the output path and PSNR.
 
 ## 📊 Evaluation
 

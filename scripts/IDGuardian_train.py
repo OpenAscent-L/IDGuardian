@@ -1,7 +1,9 @@
 """Train IDGuardian perturbations for one image or an image directory.
 
-This implementation follows Algorithm 1 in the IDGuardian supplementary
-material.  The surrogate is IP-Adapter SDXL Plus Face.  The optimized image
+This implementation follows the optimization structure in Algorithm 1 of the
+IDGuardian supplementary material.  The surrogate is IP-Adapter SDXL Plus Face.
+The released setting initializes each input with a small random perturbation
+with standard deviation 0.001 before projected updates.  The optimized image
 is updated with two signals:
 
 * CLIP image-embedding and FaceNet cosine identity losses; and
@@ -93,6 +95,12 @@ def parse_args() -> argparse.Namespace:
         type=float,
         default=0.005,
         help="PGD step size. Default: 0.005.",
+    )
+    parser.add_argument(
+        "--init-noise-std",
+        type=float,
+        default=0.001,
+        help="Standard deviation of the random initial perturbation. Default: 0.001.",
     )
     parser.add_argument(
         "--steps",
@@ -248,11 +256,14 @@ def pgd_protect(
     model_dtype: torch.dtype,
     epsilon: float,
     alpha: float,
+    init_noise_std: float,
     steps: int,
 ) -> torch.Tensor:
-    """Run Algorithm 1 from the supplementary material."""
-    # Algorithm 1 initializes delta to zero.
-    protected = image.detach().clone()
+    """Run the released IDGuardian optimization setting."""
+    # Start from the released small random initialization.
+    protected = (
+        image.detach() + init_noise_std * torch.randn_like(image)
+    ).clamp(0.0, 1.0)
 
     with torch.no_grad():
         clean_latents = encode_latents(pipe.vae, image, model_dtype)
@@ -344,6 +355,8 @@ def main() -> None:
 
     if device.type != "cuda" and model_dtype != torch.float32:
         raise ValueError("float16/bfloat16 requires CUDA; use --dtype float32 on CPU.")
+    if args.init_noise_std < 0:
+        raise ValueError("--init-noise-std must be non-negative.")
 
     input_paths = list(iter_images(args.input, args.max_images))
     args.output_dir.mkdir(parents=True, exist_ok=True)
@@ -406,6 +419,7 @@ def main() -> None:
                 model_dtype=model_dtype,
                 epsilon=args.epsilon,
                 alpha=args.alpha,
+                init_noise_std=args.init_noise_std,
                 steps=args.steps,
             )
             output_path = args.output_dir / input_path.name
@@ -416,6 +430,7 @@ def main() -> None:
                 "image_size": args.image_size,
                 "epsilon": args.epsilon,
                 "alpha": args.alpha,
+                "init_noise_std": args.init_noise_std,
                 "steps": args.steps,
                 "prompt": args.prompt,
                 "psnr_db": psnr(image, protected),
