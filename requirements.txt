@@ -1,4 +1,5 @@
 accelerate>=0.31.0
+deepface>=0.0.93
 diffusers>=0.30.0
 facenet-pytorch>=2.6.0
 huggingface-hub>=0.24.0

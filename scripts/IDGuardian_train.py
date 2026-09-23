@@ -349,7 +349,7 @@ def main() -> None:
     if not ip_adapter_path.is_file():
         raise FileNotFoundError(
             "IP-Adapter checkpoint not found: "
-            f"{ip_adapter_path}. Download it as described in checkpoints/README.md "
+            f"{ip_adapter_path}. Download it as described in README.md "
             "or pass --ip-adapter-path."
         )
 
