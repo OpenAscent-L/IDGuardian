@@ -2,7 +2,7 @@
 
 # IDGuardian
 
-### Proactive Defense Against Identity-Preserving Personalized Generation
+### No Way To Steal My Face: Proactive Defense Against Identity-Preserving Personalized Generation
 
 [![CVPR](https://img.shields.io/badge/CVPR-2026-6C5CE7)](https://openaccess.thecvf.com/content/CVPR2026/html/Xiong_No_Way_To_Steal_My_Face_Proactive_Defense_Against_Identity-Preserving_CVPR_2026_paper.html)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
@@ -10,8 +10,6 @@
 [![Diffusers](https://img.shields.io/badge/HuggingFace-Diffusers-FFD21E?logo=huggingface&logoColor=black)](https://github.com/huggingface/diffusers)
 
 Official implementation of **No Way To Steal My Face: Proactive Defense Against Identity-Preserving Personalized Generation**.
-
-**Keywords:** IDGuardian, No Way To Steal My Face, proactive identity defense, identity-preserving personalized generation, adversarial protection, IP-Adapter, CVPR 2026.
 
 </div>
 
