@@ -1,0 +1,11 @@
+accelerate>=0.31.0
+diffusers>=0.30.0
+facenet-pytorch>=2.6.0
+huggingface-hub>=0.24.0
+numpy>=1.24.0
+Pillow>=10.0.0
+safetensors>=0.4.0
+torch>=2.1.0
+torchvision>=0.16.0
+transformers>=4.44.0
+tqdm>=4.66.0

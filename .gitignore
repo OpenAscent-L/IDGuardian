@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.env
+.venv/
+checkpoints/*
+!checkpoints/README.md
+output/
+*.log
