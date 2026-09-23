@@ -11,6 +11,8 @@
 
 Official implementation of **No Way To Steal My Face: Proactive Defense Against Identity-Preserving Personalized Generation**.
 
+**Keywords:** IDGuardian, No Way To Steal My Face, proactive identity defense, identity-preserving personalized generation, adversarial protection, IP-Adapter, CVPR 2026.
+
 </div>
 
 <p align="center">
@@ -48,6 +50,8 @@ pip install -r requirements.txt
 ## 📦 Download model weights
 
 Large checkpoints are not committed to Git. Download the official IP-Adapter weights:
+
+The tracked `checkpoints/` directory is reserved for model weights. The following command downloads the required files into `checkpoints/ip_adapter/`.
 
 ```bash
 mkdir -p checkpoints/ip_adapter
@@ -100,6 +104,8 @@ Identity similarity evaluation uses the [DeepFace](https://github.com/serengil/d
 ```text
 .
 ├── assets/IDGuardian_framework.png
+├── checkpoints/
+│   └── .gitkeep
 ├── IDGuardian/
 │   ├── attention_processor.py
 │   ├── ip_adapter.py
