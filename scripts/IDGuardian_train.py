@@ -33,7 +33,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from idguardian.ip_adapter import IPAdapterPlusXL  # noqa: E402
+from IDGuardian.ip_adapter import IPAdapterPlusXL  # noqa: E402
 
 
 IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".bmp", ".webp"}
@@ -52,7 +52,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--output-dir",
         type=Path,
-        default=Path("output/idguardian"),
+        default=Path("output/IDGuardian"),
         help="Directory for protected images and results.jsonl.",
     )
     parser.add_argument(
@@ -185,7 +185,10 @@ def encode_latents(
     dtype: torch.dtype,
 ) -> torch.Tensor:
     with torch.no_grad():
-        latent = vae.encode(image.to(dtype=dtype)).latent_dist.mode()
+        # Stable Diffusion VAE inputs follow the pipeline convention [-1, 1],
+        # while the optimization image is kept in [0, 1] for PGD and saving.
+        vae_image = image.mul(2.0).sub(1.0)
+        latent = vae.encode(vae_image.to(dtype=dtype)).latent_dist.mode()
         return latent * vae.config.scaling_factor
 
 

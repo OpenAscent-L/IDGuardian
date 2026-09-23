@@ -14,7 +14,7 @@ Official implementation of **No Way To Steal My Face: Proactive Defense Against 
 </div>
 
 <p align="center">
-  <img src="assets/idguardian_framework.svg" alt="IDGuardian framework" width="980" />
+  <img src="assets/IDGuardian_framework.png" alt="IDGuardian framework from Figure 2 of the paper" width="980" />
 </p>
 
 ## 📌 Overview
@@ -40,8 +40,8 @@ The released code is the optimization implementation. Downstream personalization
 ## ⚙️ Installation
 
 ```bash
-conda create -n idguardian python=3.10 -y
-conda activate idguardian
+conda create -n IDGuardian python=3.10 -y
+conda activate IDGuardian
 pip install -r requirements.txt
 ```
 
@@ -76,7 +76,7 @@ Main 224 x 224 setting:
 ```bash
 python scripts/IDGuardian_train.py \\
   --input path/to/image_or_directory \\
-  --output-dir output/idguardian_224 \\
+  --output-dir output/IDGuardian_224 \\
   --image-size 224
 ```
 
@@ -85,7 +85,7 @@ python scripts/IDGuardian_train.py \\
 ```bash
 python scripts/IDGuardian_train.py \\
   --input path/to/image_or_directory \\
-  --output-dir output/idguardian_512 \\
+  --output-dir output/IDGuardian_512 \\
   --image-size 512
 ```
 
@@ -95,28 +95,12 @@ The default optimization configuration follows the paper: prompt `A photo of a p
 
 Identity similarity evaluation uses the [DeepFace](https://github.com/serengil/deepface) toolkit, following the paper's ArcFace, FaceNet, and VGG-Face evaluation protocol. DeepFace is listed as an evaluation dependency; the training entry point does not run evaluation automatically.
 
-## 🔍 Implementation fidelity audit
-
-The original internal script in the released archive was not mathematically equivalent to Algorithm 1. The public version explicitly corrects the following issues:
-
-| Original behavior | Public implementation |
-|---|---|
-| Used a projected CLIP identity vector as the UNet image condition | Separates the CLIP identity vector from the 16-token IP-Adapter conditioning sequence |
-| Did not concatenate IP-Adapter tokens to the SDXL text condition | Concatenates text tokens and IP-Adapter tokens before both UNet predictions |
-| Randomly initialized a new 768-to-2048 text projection | Uses the pretrained SDXL `encode_prompt` output |
-| Recomputed a stochastic clean latent and kept an unused adversarial latent path | Encodes the clean latent once and reuses it for each random timestep/noise sample |
-| Hard-coded one source image, data directories, and `cuda:1` | Supports one image or a directory with explicit CLI paths and device selection |
-| Protected-image saving and generation/evaluation calls were commented out | Saves every optimized protected image and writes per-image metadata |
-| Used a non-paper third face evaluator | Documents the DeepFace protocol used by the paper |
-
-The optimization structure now matches Supplementary Algorithm 1 and Eqs. (1), (9), (10), and (11). Preprocessing details not fully specified in the paper are made explicit: CLIP uses its standard image normalization, FaceNet uses the VGGFace2 input range, and the VAE uses the latent mean for a deterministic clean reference encoding.
-
 ## 📁 Repository structure
 
 ```text
 .
-├── assets/idguardian_framework.svg
-├── idguardian/
+├── assets/IDGuardian_framework.png
+├── IDGuardian/
 │   ├── attention_processor.py
 │   ├── ip_adapter.py
 │   ├── resampler.py

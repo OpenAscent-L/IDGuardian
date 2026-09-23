@@ -5,6 +5,5 @@ __pycache__/
 .env
 .venv/
 checkpoints/*
-!checkpoints/README.md
 output/
 *.log
